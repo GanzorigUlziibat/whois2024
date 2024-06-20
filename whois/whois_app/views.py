@@ -195,9 +195,9 @@ def resume(request):
         respRow[0]["summary"] = respRow[0]["personal_details"]["summary"]
         # personal_details
 
-        query = F"""SELECT
-                          eduid, did, institution, location, start_year, graduation_year, description, pid
-                    FROM whois.t_education
+        query = F"""SELECT eduid, d.degree ,institution, location, start_year, graduation_year, description, pid,d.did
+                        FROM whois.t_education e
+                        INNER JOIN whois.t_degree d ON d.did=e.did
                     WHERE pid={pid}"""
         cursor.execute(query)
         columns = cursor.description
@@ -214,8 +214,9 @@ def resume(request):
                                     for index, column in enumerate(value)} for value in cursor.fetchall()]
         # experience
 
-        query = F"""SELECT sid, profid, skill, pid
-                        FROM whois.t_skills
+        query = F"""SELECT sid, lp.lprofid, skill, pid,lp.proficiency
+                    FROM whois.t_skills s
+                    INNER JOIN whois.t_lanproficiency lp ON lp.lprofid=s.profid
                     WHERE pid={pid}"""
         cursor.execute(query)
         columns = cursor.description
@@ -241,8 +242,9 @@ def resume(request):
                                    for index, column in enumerate(value)} for value in cursor.fetchall()]
         # projects
 
-        query = F"""SELECT lid, pid, language, lprofid
-                            FROM whois.t_languages
+        query = F"""SELECT lid, pid, language, lp.lprofid,lp.proficiency
+                        FROM whois.t_languages l
+                        INNER JOIN whois.t_lanproficiency lp ON lp.lprofid  =l.lprofid
                     WHERE pid={pid}"""
         cursor.execute(query)
         columns = cursor.description
