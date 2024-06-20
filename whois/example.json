@@ -9,11 +9,9 @@
     "linkedin": "https://www.linkedin.com/in/johndoe",
     "github": "https://github.com/johndoe",
     "facebook": "https://fb.com/johndoe",
-    "city": "Ulaanbaatar",
-    "summary": "Experienced software engineer with over 5 years of experience in full stack development, specializing in Python, JavaScript, and cloud technologies. Proven track record of building scalable applications and leading cross-functional teams.",
+    "city": "Ulaanbaatar"
   },
-
-
+  "summary": "Experienced software engineer with over 5 years of experience in full stack development, specializing in Python, JavaScript, and cloud technologies. Proven track record of building scalable applications and leading cross-functional teams.",
   "education": [
     {
       "degree": "Master of Science in Computer Science",

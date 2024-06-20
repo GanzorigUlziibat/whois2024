@@ -193,15 +193,71 @@ def resume(request):
         respRow = [{"personal_details": {columns[index][0]: column
                                          for index, column in enumerate(value)} for value in cursor.fetchall()}]
         respRow[0]["summary"] = respRow[0]["personal_details"]["summary"]
+        # personal_details
 
         query = F"""SELECT
                           eduid, did, institution, location, start_year, graduation_year, description, pid
                     FROM whois.t_education
                     WHERE pid={pid}"""
         cursor.execute(query)
-        education = cursor.description
-        respRow[0]["education"] = [{education[index][0]: column
+        columns = cursor.description
+        respRow[0]["education"] = [{columns[index][0]: column
                                     for index, column in enumerate(value)} for value in cursor.fetchall()]
+        # education
+
+        query = F"""SELECT expid, pid, jid, company, location, start_date, end_date, responsibilities
+                        FROM whois.t_experience
+                    WHERE pid={pid}"""
+        cursor.execute(query)
+        columns = cursor.description
+        respRow[0]["experience"] = [{columns[index][0]: column
+                                    for index, column in enumerate(value)} for value in cursor.fetchall()]
+        # experience
+
+        query = F"""SELECT sid, profid, skill, pid
+                        FROM whois.t_skills
+                    WHERE pid={pid}"""
+        cursor.execute(query)
+        columns = cursor.description
+        respRow[0]["skills"] = [{columns[index][0]: column
+                                 for index, column in enumerate(value)} for value in cursor.fetchall()]
+        # skills
+
+        query = F"""SELECT  cid, pid, name, institution, year
+                        FROM whois.t_certifications
+                    WHERE pid={pid}"""
+        cursor.execute(query)
+        columns = cursor.description
+        respRow[0]["certifications"] = [{columns[index][0]: column
+                                         for index, column in enumerate(value)} for value in cursor.fetchall()]
+        # certifications
+
+        query = F"""SELECT projid, pid, name, description, url
+                            FROM whois.t_projects
+                    WHERE pid={pid}"""
+        cursor.execute(query)
+        columns = cursor.description
+        respRow[0]["projects"] = [{columns[index][0]: column
+                                   for index, column in enumerate(value)} for value in cursor.fetchall()]
+        # projects
+
+        query = F"""SELECT lid, pid, language, lprofid
+                            FROM whois.t_languages
+                    WHERE pid={pid}"""
+        cursor.execute(query)
+        columns = cursor.description
+        respRow[0]["languages"] = [{columns[index][0]: column
+                                   for index, column in enumerate(value)} for value in cursor.fetchall()]
+        # languages
+
+        # query = F"""SELECT hid, hobbies, pid
+        #                     FROM whois.t_hobbies
+        #             WHERE pid={pid}"""
+        # cursor.execute(query)
+        # columns = cursor.description
+        # respRow[0]["hobbies"] = [{columns[index][0]: column
+        #                           for index, column in enumerate(value)} for value in cursor.fetchall()]
+        # # hobbies
 
         cursor.close()
         disconnectDB(myCon)
