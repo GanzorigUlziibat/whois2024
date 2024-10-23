@@ -275,8 +275,6 @@ def resume(request):
 
     # resume
 
-def addCv(request):
-    pass
 
 @ csrf_exempt
 def home(request):
@@ -296,9 +294,6 @@ def home(request):
                 return JsonResponse(json.loads(res))
             elif action == 'resume':
                 res = resume(request)
-                return JsonResponse(json.loads(res))
-            elif action == 'adCv':
-                res = addCv(request)
                 return JsonResponse(json.loads(res))
             else:
                 action = "action not found"

@@ -1,0 +1,17 @@
+{
+    "action": "addCv",
+    "personal_details": {
+        "address": "БГД",
+        "lastname": "Жигмэд"
+    },
+    "education": [
+        {
+            "institution": "Stanford University",
+            "start_year": 2020
+        },
+        {
+            "institution": "University of Illinois at Urbana-Champaign",
+            "start_year": 2019
+        }
+    ]
+}
