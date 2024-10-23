@@ -26,8 +26,9 @@ def addCv(request):
             return JsonResponse(json.loads(result))
         if 'action' in jsons:
             action = jsons['action']
-            if action == 'adCv':
+            if action == 'addCv':
 
+                    
 
 
 

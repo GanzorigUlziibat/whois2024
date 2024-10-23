@@ -195,7 +195,7 @@ def resume(request):
         respRow[0]["summary"] = respRow[0]["personal_details"]["summary"]
         # personal_details
 
-        query = F"""SELECT eduid, d.degree ,institution, location, start_year, graduation_year, description, pid,d.did
+        query = F"""SELECT eduid, d.degree, e."degreeName", institution, location, start_year, graduation_year, description, pid,d.did
                         FROM whois.t_education e
                         INNER JOIN whois.t_degree d ON d.did=e.did
                     WHERE pid={pid}"""
