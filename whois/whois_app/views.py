@@ -240,7 +240,7 @@ def resume(request):
         columns = cursor.description
         respRow[0]["projects"] = [{columns[index][0]: column
                                    for index, column in enumerate(value)} for value in cursor.fetchall()]
-        # projects
+        # projectss
 
         query = F"""SELECT lid, pid, language, lp.lprofid,lp.proficiency
                         FROM whois.t_languages l
@@ -275,6 +275,8 @@ def resume(request):
 
     # resume
 
+def addCv(request):
+    pass
 
 @ csrf_exempt
 def home(request):
@@ -294,6 +296,9 @@ def home(request):
                 return JsonResponse(json.loads(res))
             elif action == 'resume':
                 res = resume(request)
+                return JsonResponse(json.loads(res))
+            elif action == 'adCv':
+                res = addCv(request)
                 return JsonResponse(json.loads(res))
             else:
                 action = "action not found"
