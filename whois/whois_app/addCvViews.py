@@ -11,8 +11,6 @@ def index(request):
 # hamaaralgui
 
 
-
-
 @ csrf_exempt
 def addCv(request):
     if request.method == "POST":
@@ -23,56 +21,40 @@ def addCv(request):
             action = "wrong json"
             data = []
             result = sendResponse(404, data, action)
+
             return JsonResponse(json.loads(result))
         if 'action' in jsons:
             action = jsons['action']
             if action == 'addCv':
+                address = jsons['personal_details']['address']
+                lastname = jsons['personal_details']['lastname']
 
-                    
+                con = connectDB()
+                cur = con.cursor()
+                query = f'''
+                            INSERT INTO whois.t_person_details(address, lastname)
+                            VALUES ('{address}', '{lastname}')
+                            RETURNING pid'''
 
+                cur.execute(query)
+                con.commit()
 
+                pid = cur.fetchone()[0]
 
+                eduCount = len(jsons['education'])
+                if eduCount > 0:
+                    for i in jsons['education']:
+                        query = f'''
+                                    INSERT INTO whois.t_education(pid, institution, start_year)
+                                    VALUES ({pid},'{i["institution"]}', '{i["start_year"]}')
+                                    '''
+                        cur.execute(query)
 
+                con.commit()
+                cur.close()
+                disconnectDB(con)
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-                pass
+                # person
 
                 # return JsonResponse(json.loads(res))
             else:
