@@ -214,6 +214,20 @@ def resume(request):
                                     for index, column in enumerate(value)} for value in cursor.fetchall()]
         # experience
 
+        r = respRow[0]["experience"][0]["responsibilities"]
+        lis = []
+        s = 0
+        for i in range(0, len(r)):
+            if (r[i] == ','):
+                k = r[s:i]
+                lis.append(k)
+                s = i
+        if (s != len(r) - 1):
+            k = r[s:i]
+            lis.append(k)
+        respRow[0]["experience"][0]["responsibilities"] = lis
+        # # responsibilities
+
         query = F"""SELECT sid, lp.lprofid, skill, pid,lp.proficiency
                     FROM whois.t_skills s
                     INNER JOIN whois.t_lanproficiency lp ON lp.lprofid=s.profid
