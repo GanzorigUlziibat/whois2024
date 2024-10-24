@@ -134,6 +134,7 @@ def sendResponse(resultCode, data, action="no action"):
 
 resultMessages = {
     200: "Success",
+    301: "Bad request",
     404: "Not found",
     405: "Method buruu"
 }
@@ -142,8 +143,8 @@ resultMessages = {
 
 def connectDB():
     con = psycopg2.connect(
-        host='192.168.0.15', # dotood
-        # host='59.153.86.254',# gadaad
+        # host='192.168.0.15', # dotood
+        host='59.153.86.254',# gadaad
         dbname='qrlesson',
         user='userlesson',
         password='123',

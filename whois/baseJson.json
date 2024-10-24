@@ -1,17 +1,19 @@
 {
-    "action": "addCv",
-    "personal_details": {
-        "address": "БГД",
-        "lastname": "Жигмэд"
+  "action": "addCv",
+  "personal_details": {
+    "address": "БГД",
+    "lastname": "Жигмэд",
+    "username": "bold",
+    "password": "0000"
+  },
+  "education": [
+    {
+      "institution": "Stanford University",
+      "start_year": 2020
     },
-    "education": [
-        {
-            "institution": "Stanford University",
-            "start_year": 2020
-        },
-        {
-            "institution": "University of Illinois at Urbana-Champaign",
-            "start_year": 2019
-        }
-    ]
+    {
+      "institution": "University of Illinois at Urbana-Champaign",
+      "start_year": 2019
+    }
+  ]
 }
