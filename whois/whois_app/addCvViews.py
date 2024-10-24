@@ -56,8 +56,6 @@ def addCv(request):
 
                 if expCount > 0:
                     for i in jsons['experience']:
-                        print(
-                            f'------------------------------------11111111111111111111111111-{i}')
                         company = i['company']
                         query = f'''
                                     INSERT INTO whois.t_experience(pid, company)
@@ -72,8 +70,6 @@ def addCv(request):
                         resCount = len(i['responsibilities'])
                         if resCount > 0:
                             for j in i['responsibilities']:
-                                print(
-                                    f'-------------------------------------{j}')
                                 query = f'''
                                     INSERT INTO whois.t_exp_respons(expid,responsibilities)
                                     VALUES (
