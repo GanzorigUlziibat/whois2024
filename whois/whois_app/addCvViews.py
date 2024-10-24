@@ -46,17 +46,49 @@ def addCv(request):
                     for i in jsons['education']:
                         query = f'''
                                     INSERT INTO whois.t_education(pid, institution, start_year)
-                                    VALUES ({pid},'{i["institution"]}', '{i["start_year"]}')
+                                    VALUES (
+                                        {pid},'{i["institution"]}', '{i["start_year"]}')
                                     '''
                         cur.execute(query)
+                        # t_education
+
+                expCount = len(jsons['experience'])
+
+                if expCount > 0:
+                    for i in jsons['experience']:
+                        print(
+                            f'------------------------------------11111111111111111111111111-{i}')
+                        company = i['company']
+                        query = f'''
+                                    INSERT INTO whois.t_experience(pid, company)
+                                                VALUES({pid}, '{company}')
+                                                returning expid
+                                '''
+
+                        cur.execute(query)
+                        # t_experience
+
+                        expid = cur.fetchone()[0]
+                        resCount = len(i['responsibilities'])
+                        if resCount > 0:
+                            for j in i['responsibilities']:
+                                print(
+                                    f'-------------------------------------{j}')
+                                query = f'''
+                                    INSERT INTO whois.t_exp_respons(expid,responsibilities)
+                                    VALUES (
+                                        {expid},'{j}')
+                                    '''
+                                cur.execute(query)
+                                # t_exp_respons
 
                 con.commit()
                 cur.close()
                 disconnectDB(con)
 
-                # person
+                res = sendResponse(200, [], action)
+                return JsonResponse(json.loads(res))
 
-                # return JsonResponse(json.loads(res))
             else:
                 action = "action not found"
                 data = []
