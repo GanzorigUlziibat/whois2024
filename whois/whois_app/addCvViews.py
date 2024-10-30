@@ -70,8 +70,17 @@ def addCv(request):
                 res = logout_cv(request)
                 return JsonResponse(json.loads(res))
             elif action == 'addCv':
-                address = jsons['personal_details']['address']
+                firstname = jsons['personal_details']['firstname']
                 lastname = jsons['personal_details']['lastname']
+                headline = jsons['personal_details']['headline']
+                address = jsons['personal_details']['address']
+                phone = jsons['personal_details']['phone']
+                email = jsons['personal_details']['email']
+                linkedin = jsons['personal_details']['linkedin']
+                github = jsons['personal_details']['github']
+                facebook = jsons['personal_details']['facebook']
+                summary = jsons['personal_details']['summary']
+                city = jsons['personal_details']['city']
                 username = jsons['personal_details']['username']
                 password = jsons['personal_details']['password']
 
@@ -90,16 +99,19 @@ def addCv(request):
                         # userCount
 
                         query = f'''
-                                    INSERT INTO whois.t_person_details(address, lastname,username,password)
-                                    VALUES ('{address}', '{lastname}',
-                                            '{username}','{password}')
-                                    RETURNING pid'''
+                            INSERT INTO whois.t_person_details(
+                                firstname, lastname, headline, address, phone, email,
+                                linkedin, github, facebook, summary, username, password, city)
+                            VALUES (
+                                '{firstname}', '{lastname}', '{headline}', '{address}', '{phone}', '{email}',
+                                '{linkedin}', '{github}', '{facebook}', '{summary}', '{username}', '{password}', '{city}')
+                            RETURNING pid, username    
+                                '''
+
 
                         cur.execute(query)
                         con.commit()
                         # t_person_details
-
-                        pid = cur.fetchone()[0]
 
                         eduCount = len(jsons['education'])
                         if eduCount > 0:
@@ -142,7 +154,7 @@ def addCv(request):
                         con.commit()
 
                         res = sendResponse(
-                            200, [{'success': 'amjilttai burtgegdlee'}], action)
+                            200, [{'success': 'amjilttai burtgegdlee ta login hiij orno uu'}], action)
                         return JsonResponse(json.loads(res))
 
             else:

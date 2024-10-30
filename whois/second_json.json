@@ -1,0 +1,18 @@
+{
+    "action": "addCv",
+    "personal_details": {
+        "firstname": "Жон",
+        "lastname": "Болдоо",
+        "headline": "өөрийн тухай",
+        "address": "1234 Элм гудамж, 567-р байр, Спрингфилд, Иллинойс 62704, АНУ",
+        "phone": "+1-234-567-8901",
+        "email": "john.doe@example.com",
+        "linkedin": "https://www.linkedin.com/in/johndoe",
+        "github": "https://github.com/johndoe",
+        "facebook": "https://fb.com/johndoe",
+        "city": "Улаанбаатар",
+        "summary": "summary",
+        "username": "admin",
+        "password": "admin123"
+    }
+}
