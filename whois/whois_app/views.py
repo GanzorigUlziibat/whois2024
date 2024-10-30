@@ -188,7 +188,6 @@ def resume(request):
                     FROM whois.t_person_details
                     WHERE pid={pid}  """
         cursor.execute(query)
-
         columns = cursor.description
         respRow = [{"personal_details": {columns[index][0]: column
                                          for index, column in enumerate(value)} for value in cursor.fetchall()}]
@@ -214,15 +213,16 @@ def resume(request):
                                     for index, column in enumerate(value)} for value in cursor.fetchall()]
         # experience
 
-
-        expid=respRow[0]['experience'][0]['expid']
-        query = f'''SELECT * FROM whois.t_exp_respons 
-                    where expid={expid}
-            '''
-        cursor.execute(query)
-        columns = cursor.description
-        respRow[0]["experience"][0]['responsibilities'] = [{columns[index][0]: column
-                                    for index, column in enumerate(value)} for value in cursor.fetchall()]
+        countExperience = len(respRow[0]['experience'])
+        if countExperience > 0:
+            expid = respRow[0]['experience'][0]['expid']
+            query = f'''SELECT * FROM whois.t_exp_respons
+                        where expid={expid}
+                '''
+            cursor.execute(query)
+            columns = cursor.description
+            respRow[0]["experience"][0]['responsibilities'] = [{columns[index][0]: column
+                                                                for index, column in enumerate(value)} for value in cursor.fetchall()]
 
         # # responsibilities
 
