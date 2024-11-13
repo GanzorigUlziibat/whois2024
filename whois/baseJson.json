@@ -1,31 +1,53 @@
 {
   "action": "addCv",
   "personal_details": {
-
-      "lastname": "odn"
+    "firstname": "Жон",
+    "lastname": "Болдоо",
+    "headline": "өөрийн тухай",
+    "address": "1234 Элм гудамж, 567-р байр, Спрингфилд, Иллинойс 62704, АНУ",
+    "phone": "+1-234-567-8901",
+    "email": "john.doe@example.com",
+    "linkedin": "https://www.linkedin.com/in/johndoe",
+    "github": "https://github.com/johndoe",
+    "facebook": "https://fb.com/johndoe",
+    "city": "Улаанбаатар",
+    "summary": "summary",
+    "username": "bilka",
+    "password": "admin123"
   },
   "education": [
-      {
-          "institution": "Хүмүүнлэг",
-          "start_year": 2020
-      },
-      {
-          "institution": "National univercity of Japan",
-          "start_year": 2019
-      }
+    {
+      "institution": "Хүмүүнлэг",
+      "start_year": 2020
+    },
+    {
+      "institution": "National univercity of Japan",
+      "start_year": 2019
+    }
   ],
   "experience": [
-      {
-          "job_title": "Senior Software Engineer",
-          "company": "Tech Solutions Inc.",
-          "location": "Chicago, IL",
-          "start_date": "2021-06",
-          "end_date": "Present",
-          "responsibilities": [
-              "Lead a team of 5 engineers to develop and maintain a cloud-based SaaS platform.",
-              "Implement microservices architecture to improve scalability and reduce latency.",
-              "Conduct code reviews and mentor junior developers."
-          ]
-      }
+    {
+      "job_title": "Senior Software Engineer",
+      "company": "Tech Solutions Inc.",
+      "location": "Chicago, IL",
+      "start_date": "2021-06",
+      "end_date": "Present",
+      "responsibilities": [
+        "Lead a team of 5 engineers to develop and maintain a cloud-based SaaS platform.",
+        "Implement microservices architecture to improve scalability and reduce latency.",
+        "Conduct code reviews and mentor junior developers."
+      ]
+    }
+  ],
+
+  "skills": [
+    {
+      "skill": "node",
+      "proficiency": 3
+    },
+    {
+      "skill": "flutter",
+      "proficiency": 1
+    }
   ]
 }

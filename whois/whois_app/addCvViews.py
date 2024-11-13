@@ -105,12 +105,13 @@ def addCv(request):
                             VALUES (
                                 '{firstname}', '{lastname}', '{headline}', '{address}', '{phone}', '{email}',
                                 '{linkedin}', '{github}', '{facebook}', '{summary}', '{username}', '{password}', '{city}')
-                            RETURNING pid, username    
+                            RETURNING pid, username
                                 '''
 
 
                         cur.execute(query)
                         con.commit()
+                        pid = cur.fetchone()[0]
                         # t_person_details
 
                         eduCount = len(jsons['education'])
@@ -149,9 +150,20 @@ def addCv(request):
                                                 {expid},'{j}')
                                             '''
                                         cur.execute(query)
+                                        con.commit()
                         # t_exp_respons
 
-                        con.commit()
+                        skills = jsons['skills']
+                        if 0 < len(skills):
+                            for i in skills:
+                                skill = i['skill']
+                                profid = i['proficiency']
+                                query = f'''
+                                        INSERT INTO whois.t_skills(skill,pid,profid)
+                                                            VALUES('{skill}', {pid},{profid}) '''
+                                cur.execute(query)
+                                con.commit()
+                            # skills
 
                         res = sendResponse(
                             200, [{'success': 'amjilttai burtgegdlee ta login hiij orno uu'}], action)
