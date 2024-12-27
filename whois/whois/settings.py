@@ -1,7 +1,11 @@
 import psycopg2
 import json
+import smtplib
 from pathlib import Path
 from datetime import datetime
+from email.mime.text import MIMEText
+
+
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-2am@_6ixr33atxv4hyl+^6r3%*xboew+vcoy2bgpr!v)8z8mdw'
@@ -59,7 +63,6 @@ WSGI_APPLICATION = 'whois.wsgi.application'
 # }
 
 
-
 AUTH_PASSWORD_VALIDATORS = [
     {
         'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
@@ -98,7 +101,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 def connectDB():
     con = psycopg2.connect(
         # host='192.168.0.15',  # dotood
-        host='59.153.86.254',# gadaad
+        host='59.153.86.254',  # gadaad
         dbname='qrlesson',
         user='userlesson',
         password='123',
@@ -113,7 +116,7 @@ def disconnectDB(con):
 # disconnectDB
 
 
-def sendResponse(statusCode, data=[], action=''):
+def sendResponse(statusCode, data=[], action=None):
     resJson = {}
     resJson['action'] = action
     resJson['resultCode'] = statusCode
@@ -125,6 +128,7 @@ def sendResponse(statusCode, data=[], action=''):
 
 
 statusMessage = {
+    1000: 'Бүртгэлтэй хэрэглэгч байна',
     200: 'Success',
     204: 'No Content',
     301: "Bad request",
@@ -133,5 +137,29 @@ statusMessage = {
     4001: 'Invalid Json',
     4002: 'Action Missing',
     4003: 'Invalid Action',
+    4004: 'Register Service Key дутуу',
+    4005: 'Database Error',
     5000: 'Server Error',
+    5004: 'Register Service дотоод алдаа',
 }
+
+
+def sendMail(recipient, subj, bodyHtml):
+    sender_email = "testmail@mandakh.edu.mn"
+    sender_password = "Mandakh2"
+    recipient_email = recipient
+    subject = subj
+    body = bodyHtml
+
+    html_message = MIMEText(body, 'html')
+    html_message['Subject'] = subject
+    html_message['From'] = sender_email
+    html_message['To'] = recipient_email
+    with smtplib.SMTP('smtp-mail.outlook.com', 587) as server:
+        server.ehlo()
+        server.starttls()
+        server.login(sender_email, sender_password)
+        server.sendmail(sender_email, recipient_email,
+                        html_message.as_string())
+        server.quit()
+# sendMail

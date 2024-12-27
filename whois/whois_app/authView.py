@@ -1,13 +1,58 @@
-
 from django.views.decorators.csrf import csrf_exempt
 from django.http import JsonResponse
 import json
-from whois.settings import sendResponse
+import uuid
+from datetime import datetime, timezone
+from whois.settings import sendResponse, connectDB, sendMail
+from django.contrib.auth.hashers import make_password, check_password
 
 
-def register():
+def register(request):
+    data = json.loads(request.body)
+    try:
+        firstname = data['firstname']
+        lastname = data['lastname']
+        email = data['email']
+        password = data['password']
+    except:
+        return sendResponse(4004)
 
-    return sendResponse(204)
+    try:
+        with connectDB() as con:
+            cur = con.cursor()
+            query = f'''SELECT COUNT(*) FROM whois.t_person_details WHERE email='{email}' '''
+            cur.execute(query)
+            dataFromDb = cur.fetchone()[0]
+
+            if dataFromDb != 0:
+                return sendResponse(1000)
+
+            query = f'''INSERT INTO whois.t_person_details(
+                            firstname, lastname, email, password, is_verified, created_date)
+                            VALUES ('{firstname}', '{lastname}', '{email}', '{make_password(password)}', false, NOW() )
+                            RETURNING pid;'''
+            cur.execute(query)
+            pid = cur.fetchone()[0]
+
+            token = str(uuid.uuid4())
+            query = f'''INSERT INTO whois.t_token(
+                             uid, token, tokentype, tokenenddate, createddate)
+                            VALUES ( {pid}, '{token}', 'register', NOW() + interval '1 day', NOW() );'''
+            cur.execute(query)
+
+            # query='''UPDATE whois.t_person_details
+            #             SET is_verified=true
+            #             WHERE pid=pid '''
+
+            con.commit()
+            bodyHTML = F"""<a target='_blank' href=http://localhost:8000/user?token={token}>CLICK ME</a>"""
+            sendMail(email, 'Баталгаажуулах код', bodyHTML)
+            return sendResponse(200, action='register')
+    except Exception as e:
+        return sendResponse(5004)
+
+
+# resigter
 
 
 @csrf_exempt
@@ -15,16 +60,16 @@ def authCheckService(request):
     if request.method == 'POST':
         try:
             data = json.loads(request.body)
-        except:
-            res = sendResponse(4001)
+        except Exception as e:
+            res = sendResponse(4001, error=e)
             return JsonResponse(res)
-        
+
         if 'action' not in data:
             res = sendResponse(4002)
             return JsonResponse(res)
-        
+
         if data['action'] == 'register':
-            res = register()
+            res = register(request)
             return JsonResponse(res)
         else:
             res = sendResponse(4003)
