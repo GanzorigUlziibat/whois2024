@@ -226,9 +226,9 @@ def resume(request):
 
         # # responsibilities
 
-        query = F"""SELECT sid, lp.lprofid, skill, pid,lp.proficiency
+        query = F"""SELECT sid, lp.profid, skill, pid, lp.proficiency
                     FROM whois.t_skills s
-                    INNER JOIN whois.t_lanproficiency lp ON lp.lprofid=s.profid
+                    INNER JOIN whois.t_proficiency lp ON lp.profid=s.profid
                     WHERE pid={pid}"""
         cursor.execute(query)
         columns = cursor.description
@@ -254,9 +254,9 @@ def resume(request):
                                    for index, column in enumerate(value)} for value in cursor.fetchall()]
         # projectss
 
-        query = F"""SELECT lid, pid, language, lp.lprofid,lp.proficiency
+        query = F"""SELECT lid, pid, language, lp.profid, lp.proficiency
                         FROM whois.t_languages l
-                        INNER JOIN whois.t_lanproficiency lp ON lp.lprofid  =l.lprofid
+                        INNER JOIN whois.t_proficiency lp ON lp.profid  =l.profid
                     WHERE pid={pid}"""
         cursor.execute(query)
         columns = cursor.description
@@ -264,13 +264,13 @@ def resume(request):
                                    for index, column in enumerate(value)} for value in cursor.fetchall()]
         # languages
 
-        # query = F"""SELECT hid, hobbies, pid
-        #                     FROM whois.t_hobbies
-        #             WHERE pid={pid}"""
-        # cursor.execute(query)
-        # columns = cursor.description
-        # respRow[0]["hobbies"] = [{columns[index][0]: column
-        #                           for index, column in enumerate(value)} for value in cursor.fetchall()]
+        query = F"""SELECT hid, hobbies, pid
+                            FROM whois.t_hobbies
+                    WHERE pid={pid}"""
+        cursor.execute(query)
+        columns = cursor.description
+        respRow[0]["hobbies"] = [{columns[index][0]: column
+                                  for index, column in enumerate(value)} for value in cursor.fetchall()]
         # # hobbies
 
         cursor.close()
@@ -306,7 +306,7 @@ def home(request):
                 return JsonResponse(json.loads(res))
             elif action == 'resume':
                 res = resume(request)
-                return JsonResponse(json.loads(res))
+                return JsonResponse(res)
             else:
                 action = "action not found"
                 data = []
