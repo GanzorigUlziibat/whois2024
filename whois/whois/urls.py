@@ -1,9 +1,10 @@
 
 from django.urls import path, include
-from whois_app.views import home
-from whois_app.addCvViews import addCv
+from whois_app import authView, addCvViews, views
+
 
 urlpatterns = [
-    path('api/', home, name='getCv'), # hongoroo
-    path('api/addCv/', addCv, name='addCv') ,# boldoo
+    path('api/', views.home, name='getCv'),  # hongoroo
+    path('api/addCv/', addCvViews.addCv, name='addCv'),  # boldoo
+    path('api/auth/', authView.authCheckService),
 ]
