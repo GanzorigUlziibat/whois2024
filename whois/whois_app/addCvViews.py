@@ -54,21 +54,17 @@ def addCv(request):
     if request.method == "POST":
         try:
             jsons = json.loads(request.body)
-        except json.JSONDecodeError:
-
-            action = "wrong json"
-            data = []
-            result = sendResponse(404, data, action)
-
-            return JsonResponse(json.loads(result))
+        except:
+            result = sendResponse(4001)
+            return JsonResponse(result)
         if 'action' in jsons:
             action = jsons['action']
             if action == 'login_cv':
                 res = login_cv(request)
-                return JsonResponse(json.loads(res))
+                return JsonResponse(res)
             elif action == 'logout_cv':
                 res = logout_cv(request)
-                return JsonResponse(json.loads(res))
+                return JsonResponse(res)
             elif action == 'addCv':
                 firstname = jsons['personal_details']['firstname']
                 lastname = jsons['personal_details']['lastname']
@@ -95,7 +91,7 @@ def addCv(request):
                         if userCount != 0:
                             res = sendResponse(
                                 301, [{'error': 'username давхцаж байна'}], action)
-                            return JsonResponse(json.loads(res))
+                            return JsonResponse(res)
                         # userCount
 
                         query = f'''
@@ -167,21 +163,21 @@ def addCv(request):
 
                         res = sendResponse(
                             200, [{'success': 'amjilttai burtgegdlee ta login hiij orno uu'}], action)
-                        return JsonResponse(json.loads(res))
+                        return JsonResponse(res)
 
             else:
                 action = "action not found"
                 data = []
                 result = sendResponse(404, data, action)
-                return JsonResponse(json.loads(result))
+                return JsonResponse(result)
 
         else:
             action = "no action"
             data = []
             result = sendResponse(404, data, action)
-            return JsonResponse(json.loads(result))
+            return JsonResponse(result)
     else:
         action = "method buruu"
         data = []
         result = sendResponse(405, data, action)
-        return JsonResponse(json.loads(result))
+        return JsonResponse(result)

@@ -6,7 +6,6 @@ from datetime import datetime
 from email.mime.text import MIMEText
 
 
-
 BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-2am@_6ixr33atxv4hyl+^6r3%*xboew+vcoy2bgpr!v)8z8mdw'
 DEBUG = True
@@ -129,9 +128,13 @@ def sendResponse(statusCode, data=[], action=None):
 
 statusMessage = {
     1000: 'Бүртгэлтэй хэрэглэгч байна',
+    1001: 'Token-ний хугацаа дууссан эсвэл хүчингүй token байна',
+    1002: 'Баталгаажсан хэрэглэгч байна',
+
     200: 'Success',
     204: 'No Content',
     301: "Bad request",
+
     404: "Not found",
     405: 'Invalid Method',
     4001: 'Invalid Json',
@@ -139,6 +142,7 @@ statusMessage = {
     4003: 'Invalid Action',
     4004: 'Register Service Key дутуу',
     4005: 'Database Error',
+
     5000: 'Server Error',
     5004: 'Register Service дотоод алдаа',
 }

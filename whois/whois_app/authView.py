@@ -16,7 +16,6 @@ def register(request):
         password = data['password']
     except:
         return sendResponse(4004)
-
     try:
         with connectDB() as con:
             cur = con.cursor()
@@ -40,18 +39,12 @@ def register(request):
                             VALUES ( {pid}, '{token}', 'register', NOW() + interval '1 day', NOW() );'''
             cur.execute(query)
 
-            # query='''UPDATE whois.t_person_details
-            #             SET is_verified=true
-            #             WHERE pid=pid '''
-
             con.commit()
-            bodyHTML = F"""<a target='_blank' href=http://localhost:8000/user?token={token}>CLICK ME</a>"""
+            bodyHTML = F"""<a target='_blank' href=http://localhost:8000/api/auth?token={token}>CLICK ME</a>"""
             sendMail(email, 'Баталгаажуулах код', bodyHTML)
             return sendResponse(200, action='register')
     except Exception as e:
         return sendResponse(5004)
-
-
 # resigter
 
 
@@ -61,7 +54,7 @@ def authCheckService(request):
         try:
             data = json.loads(request.body)
         except Exception as e:
-            res = sendResponse(4001, error=e)
+            res = sendResponse(4001)
             return JsonResponse(res)
 
         if 'action' not in data:
@@ -75,6 +68,38 @@ def authCheckService(request):
             res = sendResponse(4003)
             return JsonResponse(res)
 
+    elif request.method == 'GET':
+        with connectDB() as con:
+            try:
+                token = request.GET.get('token', 'detault_value')
+
+                cur = con.cursor()
+                query = f'''SELECT uid FROM whois.t_token WHERE token='{token}' and tokenenddate > NOW() '''
+                cur.execute(query)
+                pid = cur.fetchone()
+                if pid is None:
+                    res = sendResponse(1001, action='register')
+                    return JsonResponse(res)
+
+                query = f'''SELECT is_verified FROM whois.t_person_details WHERE pid='{pid[0]}' '''
+                cur.execute(query)
+                data=cur.fetchone()[0]
+
+                if data is True:
+                    res = sendResponse(1002, action='register')
+                    return JsonResponse(res)
+
+                query = f'''UPDATE whois.t_person_details
+                            SET is_verified=true
+                            WHERE pid={pid[0]}  '''
+                cur.execute(query)
+
+                con.commit()
+                res = sendResponse(200, action='register')
+                return JsonResponse(res)
+            except Exception as e:
+                res = sendResponse(5004)
+                return JsonResponse(res)
     else:
         res = sendResponse(405)
         return JsonResponse(res)
