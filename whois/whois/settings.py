@@ -9,7 +9,7 @@ from email.mime.text import MIMEText
 BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-2am@_6ixr33atxv4hyl+^6r3%*xboew+vcoy2bgpr!v)8z8mdw'
 DEBUG = True
-ALLOWED_HOSTS = ["*", "localhost", "192.168.4.102"]
+
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -54,14 +54,6 @@ TEMPLATES = [
 WSGI_APPLICATION = 'whois.wsgi.application'
 
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME': BASE_DIR / 'db.sqlite3',
-#     }
-# }
-
-
 AUTH_PASSWORD_VALIDATORS = [
     {
         'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
@@ -78,9 +70,6 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 
-# Internationalization
-# https://docs.djangoproject.com/en/5.0/topics/i18n/
-
 LANGUAGE_CODE = 'en-us'
 
 TIME_ZONE = 'UTC'
@@ -93,14 +82,13 @@ WSGI_APPLICATION = 'whois.wsgi.application'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 STATIC_URL = 'static/'
 CORS_ORIGIN_ALLOW_ALL = True
-CORS_ALLOW_CREDENTIALS = True
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
 def connectDB():
     con = psycopg2.connect(
-        host='192.168.0.15',  # dotood
-        # host='59.153.86.254',  # gadaad
+        # host='192.168.0.15',  # dotood
+        host='59.153.86.254',  # gadaad
         dbname='qrlesson',
         user='userlesson',
         password='123',
@@ -130,6 +118,9 @@ statusMessage = {
     1000: 'Бүртгэлтэй хэрэглэгч байна',
     1001: 'Token-ний хугацаа дууссан эсвэл хүчингүй token байна',
     1002: 'Баталгаажсан хэрэглэгч байна',
+    1003: 'Амжилттай, Та мэйл хаягруугаа орж бүртгэлээ баталгаажуулга уу!',
+    1004: 'Бүртгэлгүй хэрэглэгч байна',
+
 
     200: 'Success',
     204: 'No Content',
@@ -142,8 +133,12 @@ statusMessage = {
     4003: 'Invalid Action',
     4004: 'Register Service Key дутуу',
     4005: 'Database Error',
+    4006: 'Login key Error',
+    4007: 'Нууц үг буруу байна',
+    4008: 'Бүртгэлээ баталгаажуулна уу',
 
     5000: 'Server Error',
+    5001: 'login Service дотоод алдаа',
     5004: 'Register Service дотоод алдаа',
 }
 

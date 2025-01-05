@@ -19,7 +19,7 @@ def register(request):
     try:
         with connectDB() as con:
             cur = con.cursor()
-            query = f'''SELECT COUNT(*) FROM whois.t_person_details WHERE email='{email}' '''
+            query = f'''SELECT COUNT(*) FROM whois.t_person_details WHERE email='{email}' AND is_verified=true '''
             cur.execute(query)
             dataFromDb = cur.fetchone()[0]
 
@@ -28,7 +28,8 @@ def register(request):
 
             query = f'''INSERT INTO whois.t_person_details(
                             firstname, lastname, email, password, is_verified, created_date)
-                            VALUES ('{firstname}', '{lastname}', '{email}', '{make_password(password)}', false, NOW() )
+                            VALUES ('{firstname}', '{lastname}', '{email}',
+                                    '{make_password(password)}', false, NOW() )
                             RETURNING pid;'''
             cur.execute(query)
             pid = cur.fetchone()[0]
@@ -42,13 +43,56 @@ def register(request):
             con.commit()
             bodyHTML = F"""<a target='_blank' href=http://localhost:8000/api/auth?token={token}>CLICK ME</a>"""
             sendMail(email, 'Баталгаажуулах код', bodyHTML)
-            return sendResponse(200, action='register')
+            return sendResponse(1003, action='register')
     except Exception as e:
         return sendResponse(5004)
 # resigter
 
 
-@csrf_exempt
+def login(request):
+    try:
+        jsons = json.loads(request.body)
+        email = jsons['email']
+        password = jsons['password']
+    except Exception as e:
+        res = sendResponse(4006)
+        return res
+
+    try:
+        with connectDB() as con:
+            cur = con.cursor()
+
+            query = f'''SELECT email FROM whois.t_person_details
+                        WHERE email='{email}' '''
+            cur.execute(query)
+            data = cur.fetchone()
+
+            if not data:
+                res = sendResponse(1004)
+                return res
+
+            query = f'''SELECT password FROM whois.t_person_details
+                        WHERE email='{email}' and is_verified=true '''
+            cur.execute(query)
+            data = cur.fetchone()
+
+            if not data:
+                res = sendResponse(4008)
+                return res
+
+            if not check_password(password, data[0]):
+                res = sendResponse(4007)
+                return res
+            
+            res = sendResponse(200)
+            return res
+    except Exception as e:
+        res = sendResponse(5001)
+        return res
+# login
+
+
+@ csrf_exempt
 def authCheckService(request):
     if request.method == 'POST':
         try:
@@ -63,6 +107,9 @@ def authCheckService(request):
 
         if data['action'] == 'register':
             res = register(request)
+            return JsonResponse(res)
+        elif data['action'] == 'login':
+            res = login(request)
             return JsonResponse(res)
         else:
             res = sendResponse(4003)
@@ -83,7 +130,7 @@ def authCheckService(request):
 
                 query = f'''SELECT is_verified FROM whois.t_person_details WHERE pid='{pid[0]}' '''
                 cur.execute(query)
-                data=cur.fetchone()[0]
+                data = cur.fetchone()[0]
 
                 if data is True:
                     res = sendResponse(1002, action='register')
