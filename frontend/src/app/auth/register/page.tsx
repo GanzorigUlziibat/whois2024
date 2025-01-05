@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import { sendRequest } from "../../../services/api";
 import { useRouter } from "next/navigation";
 
+// router eer message damjuulah
 export default function Register() {
   const router = useRouter();
   const [message, setMessage] = useState<string>("");
@@ -16,10 +17,10 @@ export default function Register() {
   });
   const [load, setLoad] = useState(false);
 
-  // useEffect(() => {
-  //   const token = localStorage.getItem("token");
-  //   if (token) router.push("/");
-  // }, [router]);
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (token) router.push("/");
+  }, [router]);
 
   const handleChange = (e: any) => {
     const { name, value } = e.target;
@@ -62,7 +63,7 @@ export default function Register() {
 
   return (
     <>
-      <h3>Register</h3>
+      <h1>Register</h1>
       <p>{message}</p>
       <form onSubmit={handleSubmit}>
         <input
@@ -120,6 +121,8 @@ export default function Register() {
           {load ? "registering" : "register"}
         </button>
       </form>
+      <br />
+      <button onClick={() => router.push("/auth/login")}>login</button>
     </>
   );
 }
