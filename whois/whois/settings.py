@@ -33,7 +33,6 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'whois.urls'
-CORS_ORIGIN_ALLOW_ALL = True
 
 TEMPLATES = [
     {
@@ -84,6 +83,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 STATIC_URL = 'static/'
 CORS_ORIGIN_ALLOW_ALL = True
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+ALLOWED_HOSTS = ['whoism.mandakh.org', '127.0.0.1']
 
 
 def connectDB():

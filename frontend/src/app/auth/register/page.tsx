@@ -29,14 +29,14 @@ export default function Register() {
 
   const handleSubmit = async (e: any) => {
     e.preventDefault();
-
-    if (user.password !== user.repassword && !user.email) {
-      setMessage("Нууц үг таарахгүй байна");
-      return;
-    }
-
     try {
       setLoad(true);
+
+      if (user.password !== user.repassword || !user.email) {
+        setMessage("Нууц үг таарахгүй байна");
+        return;
+      }
+
       const data = await sendRequest(
         "http://127.0.0.1:8000/api/auth/",
         "post",
@@ -62,23 +62,24 @@ export default function Register() {
   };
 
   return (
-    <>
-      <h1>Register</h1>
+    <div style={{ width: "300px", margin: "0 auto" }}>
       <p>{message}</p>
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit} className="form-control">
+        <h1>Register</h1>
+        <br />
         <input
           type="text"
+          className="form-control"
           name="lastname"
           placeholder="Овог"
           value={user.lastname}
-          // onChange={setLastname((e) => e.target.value)}
           onChange={(e) => handleChange(e)}
           required
         />
         <br />
-        <br />
         <input
           type="text"
+          className="form-control"
           name="firstname"
           placeholder="Нэр"
           value={user.firstname}
@@ -86,16 +87,15 @@ export default function Register() {
           required
         />
         <br />
-        <br />
         <input
           type="email"
           value={user.email}
           onChange={(e) => handleChange(e)}
           name="email"
+          className="form-control"
           placeholder="email"
           required
         />
-        <br />
         <br />
         <input
           type="password"
@@ -103,9 +103,9 @@ export default function Register() {
           onChange={(e) => handleChange(e)}
           placeholder="********"
           value={user.password}
+          className="form-control"
           required
         />
-        <br />
         <br />
         <input
           type="password"
@@ -113,16 +113,27 @@ export default function Register() {
           onChange={(e) => handleChange(e)}
           value={user.repassword}
           placeholder="********"
+          className="form-control"
           required
         />
         <br />
-        <br />
-        <button type="submit" disabled={load}>
+        <button
+          type="submit"
+          disabled={load}
+          className="form-control btn btn-success"
+        >
           {load ? "registering" : "register"}
         </button>
+        <br />
+        <br />
+        <button
+          type="button"
+          onClick={() => router.push("/auth/login")}
+          className="form-control btn btn-secondary"
+        >
+          to login
+        </button>
       </form>
-      <br />
-      <button onClick={() => router.push("/auth/login")}>login</button>
-    </>
+    </div>
   );
 }
