@@ -33,6 +33,7 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'whois.urls'
+CORS_ORIGIN_ALLOW_ALL = True
 
 TEMPLATES = [
     {
