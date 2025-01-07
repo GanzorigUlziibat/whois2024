@@ -1,21 +1,26 @@
-'use client'
-import { usePathname } from "next/navigation";
+"use client";
+import { usePathname, useRouter } from "next/navigation";
+import { useState, useEffect } from "react";
+import "bootstrap/dist/css/bootstrap.min.css";
+import "bootstrap/dist/js/bootstrap.bundle.min.js";
 
 export default function RootLayout({ children }: any) {
   const pathName = usePathname();
+  const router = useRouter();
+  const [fname, setFname] = useState<string | null>(null); // `null` болгон өөрчиллөө
 
   const hideLayout =
     pathName === "/auth/login" || pathName === "/auth/register";
+
+  useEffect(() => {
+    const storedFname = localStorage.getItem("firstname");
+    if (storedFname) {
+      setFname(storedFname); // Хэрэв localStorage-д байна уу гэдгийг шалгах
+    }
+  }, [hideLayout]);
+
   return (
     <html lang="en">
-      <head>
-        <link
-          href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
-          rel="stylesheet"
-          integrity="sha384-...checksum..."
-          crossOrigin="anonymous"
-        />
-      </head>
       <body>
         {!hideLayout && (
           <nav className="navbar navbar-expand-lg navbar-light bg-light">
@@ -44,16 +49,33 @@ export default function RootLayout({ children }: any) {
                     Home <span className="visually-hidden">(current)</span>
                   </a>
                 </li>
-                <li className="nav-item">
-                  <a className="nav-link" href="/auth/login">
-                    Login
-                  </a>
-                </li>
-                <li className="nav-item">
-                  <a className="nav-link" href="/auth/register">
-                    Register
-                  </a>
-                </li>
+
+                {fname ? (
+                  <li className="nav-item">
+                    <a
+                      className="nav-link"
+                      href="/"
+                      onClick={() => {
+                        localStorage.removeItem("firstname");
+                      }}
+                    >
+                      Logout ({fname})
+                    </a>
+                  </li>
+                ) : (
+                  <>
+                    <li className="nav-item">
+                      <a className="nav-link" href="/auth/login">
+                        Login
+                      </a>
+                    </li>
+                    <li className="nav-item">
+                      <a className="nav-link" href="/auth/register">
+                        Register
+                      </a>
+                    </li>
+                  </>
+                )}
               </ul>
               <form className="d-flex">
                 <input
@@ -70,11 +92,6 @@ export default function RootLayout({ children }: any) {
           </nav>
         )}
         <div className="container">{children}</div>
-        <script
-          src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
-          integrity="sha384-...checksum..."
-          crossOrigin="anonymous"
-        ></script>
       </body>
     </html>
   );

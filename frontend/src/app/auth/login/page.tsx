@@ -16,14 +16,18 @@ export default function Login() {
 
   const handSubmit = async (e: any) => {
     e.preventDefault();
+
     try {
       setLoading(true);
       const data = await sendRequest(
-        "http://127.0.0.1:8000/api/auth/",
+        // "http://127.0.0.1:8000/api/auth/",
+        "http://whoism.mandakh.org/api/auth/",
         "post",
         JSON.stringify(user)
       );
       if (data.resultCode === 200) {
+        console.log(JSON.stringify(data));
+        localStorage.setItem("firstname", data.data[0].firstname);
         router.push("/");
         return;
       }
@@ -45,18 +49,21 @@ export default function Login() {
   };
 
   return (
-    <>
-      <h1>Login</h1>
+    <div style={{ width: "300px", margin: "0 auto" }}>
       <p>{message}</p>
-      <form onSubmit={handSubmit}>
+      <form onSubmit={handSubmit} className="form-control">
+        <h1>Login</h1>
+        <br />
         <input
           type="email"
           value={user.email}
           name="email"
           onChange={handleChange}
-          placeholder="email"
+          placeholder="Email"
+          className="form-control"
+          required
         />
-        <br />
+
         <br />
         <input
           type="password"
@@ -64,15 +71,23 @@ export default function Login() {
           onChange={handleChange}
           name="password"
           placeholder="************"
+          className="form-control"
+          required
         />
         <br />
-        <br />
-        <button type="submit" style={{ marginRight: "20px" }}>
+        <button type="submit" className="form-control btn btn-success">
           {loading ? "logining..." : "login"}
         </button>
+        <br />
+        <br />
+        <button
+          type="button"
+          onClick={() => router.push("/auth/register")}
+          className="form-control btn btn-primary"
+        >
+          register
+        </button>
       </form>
-      <br />
-      <button onClick={() => router.push("/auth/register")}>register</button>
-    </>
+    </div>
   );
 }

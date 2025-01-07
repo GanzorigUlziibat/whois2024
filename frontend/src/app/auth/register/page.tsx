@@ -42,10 +42,8 @@ export default function Register() {
         "post",
         JSON.stringify(user)
       );
-      console.log(data);
       setMessage(data.resultMessage);
     } catch (e) {
-      console.log(e);
       setMessage("Сервер дотоод алдаа гарлаа");
     } finally {
       setTimeout(() => setMessage(""), 5000);

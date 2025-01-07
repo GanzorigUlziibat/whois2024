@@ -71,10 +71,11 @@ def login(request):
                 res = sendResponse(1004)
                 return res
 
-            query = f'''SELECT password FROM whois.t_person_details
+            query = f'''SELECT password, firstname, pid  FROM whois.t_person_details
                         WHERE email='{email}' and is_verified=true '''
             cur.execute(query)
             data = cur.fetchone()
+
 
             if not data:
                 res = sendResponse(4008)
@@ -83,10 +84,15 @@ def login(request):
             if not check_password(password, data[0]):
                 res = sendResponse(4007)
                 return res
-            
-            res = sendResponse(200)
+
+            resJson = {
+                'pid': data[2],
+                'firstname': data[1]
+            }
+            res = sendResponse(200, [resJson])
             return res
     except Exception as e:
+        print(f'###################{e}')
         res = sendResponse(5001)
         return res
 # login
